@@ -1,0 +1,46 @@
+     Chức năng add user:
+     b1: xử lý form
+     b2 : xử lý sự kiện click submit ->dispatch action lên store 
+     b3 : xử lý action ->mutation(update state)
+     b4 : lấy state từ store để show lên màn hình 
+     
+
+     --Chức năng xóa:
+     b1: xác định component có nút xóa(UserItem)
+     b2 : xử lý sự kiện click nút xóa -> dispatch action (gửi kèm id)
+     b3 : lên vuex(store) xử lý action ->commit mutation(xóa và cập nhật lại store)
+     b4 : lấy state từ store về để show lên màn hình 
+
+
+     Lấy danh sách user trên api và đổ về giao diện
+     -đầu tiên ta xử lý trong lifecycle created() của file UserList.vue,ta gọi đến this.getAllUser();
+     -thằng getAllUser này lấy từ ...mapActions
+     -và để thằng getAllUser này hoạt động được ta phải dispatch nó trong getAllUserActions của file user.js
+     -trong getAllUserActions,ta gọi đến thằng getALlUserAPI(nó là một hàm sử dụng thư viện axios để call API),hàm này trả về danh sách users
+     -và khi gọi hàm này ta gán nó vào trong biến tên là payload
+     -tiếp theo xử lý mutation
+     -tạo ra 1 thằng là getAllUserMutation(),thằng này nhận giá trị từ actions truyền lên là payload và gán this.userList=payload thì lúc này danh sách user hiển thị trên màn hình nó sẽ là danh sách user trên api 
+     
+
+
+     Thêm mới một user thông qua API 
+     Luồng xử lý:
+     -đầu tiên người dùng nhấn vào form add user,sau khi nhập dữ liệu xong nó sẽ gọi đến cái actions là addUserAction đồng thời gửi kèm theo dữ liệu vừa nhập(payload)
+     -xử lý action,ta gọi đến cái thằng createUserAPI(payload) để truyền thông tin user vừa add cho nó để nó thêm dl trên server là addUser
+     -sau khi đã thêm dc dl mới lên server thì cái data user của chúng ta lúc này là một cái mảng mới vậy nên cần dispath gọi cái action getAllUserAction trong thằng addUserAction để cho nó load dữ liệu mới nhất ra trên màn hình
+
+
+
+     Xóa user thông qua API
+     Luồng xử lý:
+     -đầu tiên ng dùng nhất nút remove,ta cần phải xử lý sự kiện và lấy được cái id của user cần xóa 
+     -tiếp theo cần truyền được cái id đó lên actions để xử lý 
+     -trong actions removeUserActions nó sẽ gọi đến thằng removeUserApi để thực hiện xóa user trên server 
+     -lúc này dl trên server đã được xóa và ta cần gọi lại action getAllUserAction để nó load dữ liệu mới nhất 
+
+
+     Cập nhật user thông qua API 
+     Luồng xử lý:
+     -đầu tiên người dùng nhấn vào nút update->mở form update->ng dùng nhập thông tin->lấy thông tin ng dùng vừa nhập gửi đến thằng updateUserAction 
+     -thằng updateUserAction sẽ gọi đến thằng updateUserApi để nó cập nhật dữ liệu lên server thông qua phương thức PUT 
+     -dữ liệu cập nhật xong ta cần phải gọi lại thằng getAllUserAction để cho nó load dữ liệu mới nhất
